@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐕 DogScript Interpreter</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #222;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        #input {
+            width: 100%;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 16px;
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            margin-bottom: 10px;
+        }
+        
+        #output {
+            background: #111;
+            padding: 15px;
+            min-height: 300px;
+            border: 1px solid #555;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <h1>🐕 DogScript Interpreter</h1>
+        <p>Type DogScript commands and press Enter</p>
+    </div>
+    
+    <input type="text" id="input" placeholder="Enter DogScript command... (e.g., bark('Hello World!'))" autofocus>
+    <div id="output">🐕 DogScript Ready! Type commands above and press Enter.
+Available commands: bark, whisper, howl, giveTreat, sniffTreat, fetchSticks, dropSticks, playFetch, and more...
+
+</div>
+
+    <script src="commands.js"></script>
+    <script>
+        // Initialize DogScript instance
+        const dogScript = new DogScript();
+        const input = document.getElementById('input');
+        const output = document.getElementById('output');
+
+        // Handle command input
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim();
+                if (command) {
+                    executeCommand(command);
+                    this.value = '';
+                }
+            }
+        });
+
+        function executeCommand(command) {
+            const timestamp = new Date().toLocaleTimeString();
+            output.textContent += `\n> ${command}\n`;
+            
+            try {
+                // Check if the command exists in DogScript
+                const result = dogScript.parseCommand(command);
+                
+                if (result !== undefined) {
+                    output.textContent += `${result}\n`;
+                } else {
+                    output.textContent += `❓ Command not found in DogScript library\n`;
+                }
+            } catch (error) {
+                output.textContent += `❌ Error executing command: ${error.message}\n`;
+            }
+            
+            // Auto-scroll to bottom
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Add some example commands on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                output.textContent += `
+Example commands to try:
+bark("Hello World!")
+giveTreat("myVar", 42)
+sniffTreat("myVar")
+fetchSticks(5, 3)
+playFetch()
+randomTreat(1, 10)
+
+`;
+            }, 500);
+        });
+    </script>
+</body>
+</html>
