@@ -350,7 +350,6 @@ class DogScript {
     }
 }
 
-// Export for browser and Node.js
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DogScript;
 } else {
